@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+int calculateDistance(const std::vector<std::vector<int>>& graph, const std::vector<int>& path) {
+    int distance = 0;
+    int n = path.size();
+    for (int i = 0; i < n - 1; ++i) {
+        int src = path[i];
+        int dest = path[i + 1];
+        distance += graph[src][dest];
+    }
+    distance += graph[path[n - 1]][path[0]];
+    return distance;
+}
+std::vector<int> tspBruteForce(const std::vector<std::vector<int>>& graph) {
+    int n = graph.size(); // Number of cities
+    std::vector<int> cities(n);
+    for (int i = 0; i < n; ++i) {
+        cities[i] = i;
+    }
+    int minDistance = INT_MAX;
+    std::vector<int> optimalPath;
+    do {
+        int currentDistance = calculateDistance(graph, cities);
+        if (currentDistance < minDistance) {
+            minDistance = currentDistance;
+            optimalPath = cities;
+        }
+    } while (std::next_permutation(cities.begin() + 1, cities.end()));
+    return optimalPath;
+}
+int main() {
+    int n; // Number of cities
+    std::cout << "Enter the number of cities: ";
+    std::cin >> n;
+    std::vector<std::vector<int>> graph(n, std::vector<int>(n));
+    std::cout << "Enter the distance matrix:\n";
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            std::cin >> graph[i][j];
+        }
+    }
+    std::vector<int> optimalPath = tspBruteForce(graph);
+    std::cout << "Optimal Path: ";
+    for (int city : optimalPath) {
+        std::cout << city << " ";
+    }
+    std::cout << optimalPath[0] << "\n"; // Return to the starting city
+    std::cout << "Total Distance: " << calculateDistance(graph, optimalPath) << "\n";
+    return 0;
+}

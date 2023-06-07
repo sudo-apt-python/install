@@ -1,0 +1,106 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<time.h>
+#define N 1000000
+int a[N], n , start, end,beg;
+void printArray()
+{
+  int i;
+for (i = 0; i < n; i++){
+printf("%d ",a[i]);}
+}
+ void Clock()
+{
+    double time1, time_diff;
+    int n;
+    time1 = (double) clock();  
+    time1 = time1 / CLOCKS_PER_SEC;  
+    for (n=0; n<100000000; n++);
+    time_diff = (((double) clock()) / CLOCKS_PER_SEC) - time1;
+    printf("The elapsed time is %lf seconds\n", time_diff);
+}
+void bestcase()
+{
+  int i;
+printf("Enter the number(ascending number) : ");
+scanf("%d",&n);
+Clock();
+}
+void worstcase()
+{
+  int i;
+printf("Enter the number(descending number) : ");
+scanf("%d",&n);
+for(i=n-1;i<1;i++)
+printf("%d",i);
+Clock();
+}
+void averagecase()
+{
+  int i;
+printf("\nEnter range of your numbers to sort : ");
+scanf("%d",&n);
+for (int i = 0; i < n; i++)
+        a[i] = (rand() % (100) + 1);
+
+        Clock();
+}
+void merge(int a[N], int beg, int mid, int end)    
+{    
+    int i, j, k;  
+    int n1 = mid - beg + 1;    
+    int n2 = end - mid;    
+    int LeftArray[n1], RightArray[n2]; 
+    for (int i = 0; i < n1; i++)    
+    LeftArray[i] = a[beg + i];    
+    for (int j = 0; j < n2; j++)    
+    RightArray[j] = a[mid + 1 + j];    
+    i = 0; /* initial index of first sub-array */  
+    j = 0; /* initial index of second sub-array */   
+    k = beg;  /* initial index of merged sub-array */  
+    while (i < n1 && j < n2)    
+    {    
+        if(LeftArray[i] <= RightArray[j])    
+        {    
+            a[k] = LeftArray[i];    
+            i++;    
+        }    
+        else    
+        {    
+            a[k] = RightArray[j];    
+            j++;    
+        }    
+        k++;    
+    }    
+    while (i<n1)    
+    {    
+        a[k] = LeftArray[i];    
+        i++;    
+        k++;    
+    }    
+    while (j<n2)    
+    {    
+        a[k] = RightArray[j];    
+        j++;    
+        k++;    
+    }    
+}    
+void mergeSort(int a[N], int beg, int end)  
+{  
+    if (beg < end)   
+    {  
+        int mid = (beg + end) / 2;  
+        mergeSort(a, beg, mid);  
+        mergeSort(a, mid + 1, end);  
+        merge(a, beg, mid, end);  
+    }  
+     bestcase();
+    worstcase();
+    averagecase();
+}  
+int main(void){
+         printf("MERGE SORT");
+                 mergeSort( a,  beg,  end) ;
+}
+

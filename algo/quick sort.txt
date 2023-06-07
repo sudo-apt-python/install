@@ -1,0 +1,83 @@
+A#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<time.h>
+#define N 1000000
+int a[N], n , start, end,beg;
+void printArray()
+{
+  int i;
+for (i = 0; i < n; i++){
+printf("%d ",a[i]);}
+}
+ void Clock()
+{
+    double time1, time_diff;
+    int n;
+    time1 = (double) clock();  
+    time1 = time1 / CLOCKS_PER_SEC;  
+    for (n=0; n<100000000; n++);
+    time_diff = (((double) clock()) / CLOCKS_PER_SEC) - time1;
+    printf("The elapsed time is %lf seconds\n", time_diff);
+}
+void bestcase()
+{
+  int i;
+printf("Enter the number(ascending number) : ");
+scanf("%d",&n);
+Clock();
+}
+void worstcase()
+{
+  int i;
+printf("Enter the number(descending number) : ");
+scanf("%d",&n);
+for(i=n-1;i<1;i++)
+printf("%d",i);
+Clock();
+}
+void averagecase()
+{
+  int i;
+printf("\nEnter range of your numbers to sort : ");
+scanf("%d",&n);
+for (int i = 0; i < n; i++)
+        a[i] = (rand() % (100) + 1);
+        Clock();
+}
+int partition (int a[], int start, int end)  
+{  
+    int pivot = a[end]; // pivot element  
+    int i = (start - 1);  
+    for (int j = start; j <= end - 1; j++)  
+    {  
+        // If current element is smaller than the pivot  
+        if (a[j] < pivot)  
+        {  
+            i++; // increment index of smaller element  
+            int t = a[i];  
+            a[i] = a[j];  
+            a[j] = t;  
+        }  
+    }  
+    int t = a[i+1];  
+    a[i+1] = a[end];  
+    a[end] = t;  
+    return (i + 1);  
+}  
+void quick(int a[N], int start, int end) /* a[] = array to be sorted, start = Starting index, end = Ending index */  
+{  
+    if (start < end)  
+    {  
+        int p = partition(a, start, end); //p is the partitioning index  
+        quick(a, start, p - 1);  
+        quick(a, p + 1, end);  
+    }
+     bestcase();
+    worstcase();
+    averagecase();
+}  
+int main(void){
+ printf("QUICK SORT ");
+                quick(a,start,end);
+}

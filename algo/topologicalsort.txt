@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+void dfs(const std::vector<std::vector<int>>& graph, std::vector<bool>& visited, std::stack<int>& result, int vertex) {
+    visited[vertex] = true;
+    for (int neighbor : graph[vertex]) {
+        if (!visited[neighbor]) {
+            dfs(graph, visited, result, neighbor);
+        }
+    }
+    result.push(vertex);
+}
+std::vector<int> topologicalSortDFS(const std::vector<std::vector<int>>& graph, int V) {
+    std::vector<bool> visited(V, false);
+    std::stack<int> result;
+    for (int i = 0; i < V; ++i) {
+        if (!visited[i]) {
+            dfs(graph, visited, result, i);
+        }
+    }
+    std::vector<int> topologicalOrder;
+    while (!result.empty()) {
+        topologicalOrder.push_back(result.top());
+        result.pop();
+    }
+    return topologicalOrder;
+}
+std::vector<int> topologicalSortBFS(const std::vector<std::vector<int>>& graph, int V) {
+    std::vector<int> inDegree(V, 0);
+    for (const auto& neighbors : graph) {
+        for (int neighbor : neighbors) {
+            inDegree[neighbor]++;
+        }
+    }
+    std::queue<int> q;
+    for (int i = 0; i < V; ++i) {
+        if (inDegree[i] == 0) {
+            q.push(i);
+        }
+    }
+    std::vector<int> topologicalOrder;
+    while (!q.empty()) {
+        int vertex = q.front();
+        q.pop();
+        topologicalOrder.push_back(vertex);
+        for (int neighbor : graph[vertex]) {
+            inDegree[neighbor]--;
+            if (inDegree[neighbor] == 0) {
+                q.push(neighbor);
+            }
+        }
+    }
+    return topologicalOrder;
+}
+int main() {
+    int V, E;
+    std::cout << "Enter the number of vertices: ";
+    std::cin >> V;
+    std::cout << "Enter the number of edges: ";
+    std::cin >> E;
+  std::vector<std::vector<int>> graph(V);
+    std::cout << "Enter the edges (u, v):\n";
+    for (int i = 0; i < E; ++i) {
+        int u, v;
+        std::cin >> u >> v;
+        graph[u].push_back(v);
+    }
+    std::vector<int> topologicalOrderDFS = topologicalSortDFS(graph, V);
+    std::vector<int> topologicalOrderBFS = topologicalSortBFS(graph, V);
+    std::cout << "Topological order using DFS: ";
+    for (int vertex : topologicalOrderDFS) {
+        std::cout << vertex << " ";
+    }
+    std::cout << "\n";
+    std::cout << "Topological order using BFS: ";
+    for (int vertex : topologicalOrderBFS) {
+        std::cout << vertex << " ";
+    }
+    std::cout << "\n";
+    return 0;
+}
